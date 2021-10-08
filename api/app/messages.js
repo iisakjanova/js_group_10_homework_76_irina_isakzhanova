@@ -16,4 +16,10 @@ router.post('/', (req, res) => {
     }
 });
 
+router.get('/', (req, res) => {
+    const messages = fileDb.getItems(30);
+    res.send(messages);
+});
+
+
 module.exports = router;
