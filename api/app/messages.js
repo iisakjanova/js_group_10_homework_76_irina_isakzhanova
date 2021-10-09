@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
         if (isNaN(date.getDate())) {
             res.status(400).send({"error": "Invalid date"});
         } else {
-            messages = fileDb.getItemsByDatetime(req.query.datetime);
+            messages = fileDb.getItemsSinceDatetime(req.query.datetime);
         }
     } else {
         messages = fileDb.getItems(30);
@@ -33,6 +33,5 @@ router.get('/', (req, res) => {
 
     res.send(messages);
 });
-
 
 module.exports = router;

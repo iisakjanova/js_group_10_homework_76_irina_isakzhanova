@@ -13,8 +13,9 @@ app.use(cors());
 
 app.use('/messages', messages);
 
-fileDb.init();
-
-app.listen(port, () => {
-    console.log('We are live in ' + port);
-});
+(async () => {
+    await fileDb.init();
+    app.listen(port, () => {
+        console.log('We are live in ' + port);
+    });
+})();

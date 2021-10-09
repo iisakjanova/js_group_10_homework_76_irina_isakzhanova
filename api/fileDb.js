@@ -6,18 +6,18 @@ const filename = './db.json';
 let data = [];
 
 module.exports = {
-    init() {
+    async init() {
         try {
-            const fileContents = fs.readFileSync(filename);
+            const fileContents = await fs.promises.readFile(filename, 'utf8');
             data = JSON.parse(fileContents);
         } catch (e) {
-            data = [];
+            console.error(e);
         }
     },
     getItems(maxQty) {
         return data.slice(-maxQty);
     },
-    getItemsByDatetime(datetime) {
+    getItemsSinceDatetime(datetime) {
         const index = data.findIndex(elem => elem.datetime === datetime);
         return data.slice(index + 1);
     },
