@@ -17,9 +17,13 @@ module.exports = {
     getItems(maxQty) {
         return data.slice(-maxQty);
     },
+    getItemsByDatetime(datetime) {
+        const index = data.findIndex(elem => elem.datetime === datetime);
+        return data.slice(index + 1);
+    },
     addItem(item) {
         item.id = nanoid();
-        item.datetime = dayjs().format();
+        item.datetime = dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
         data.push(item);
         this.save();
         return item;

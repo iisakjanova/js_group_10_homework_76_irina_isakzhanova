@@ -17,7 +17,20 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    const messages = fileDb.getItems(30);
+    let messages;
+
+    if (req.query.datetime) {
+        const date = new Date(req.query.datetime);
+
+        if (isNaN(date.getDate())) {
+            res.status(400).send({"error": "Invalid date"});
+        } else {
+            messages = fileDb.getItemsByDatetime(req.query.datetime);
+        }
+    } else {
+        messages = fileDb.getItems(30);
+    }
+
     res.send(messages);
 });
 
