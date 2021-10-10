@@ -1,10 +1,13 @@
+import {CssBaseline} from "@material-ui/core";
+
 import Chat from "./containers/Chat/Chat";
 
 const App = () => {
   return (
-      <div className="App">
+      <>
+          <CssBaseline />
           <Chat />
-      </div>
+      </>
   );
 };
 

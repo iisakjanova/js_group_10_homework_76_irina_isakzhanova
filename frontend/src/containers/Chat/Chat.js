@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import React from 'react';
+import {Box, Grid, makeStyles, Typography} from "@material-ui/core";
 
 import Message from "../../components/Message/Message";
 import MessageForm from "../../components/MessageForm/MessageForm";
@@ -8,7 +9,19 @@ import axiosApi from "../../axiosApi";
 const ERROR_MESSAGE_TEXT = 'Something went wrong... Error status ';
 let lastDatetime;
 
+const useStyles = makeStyles(theme => ({
+    root: {
+        padding: theme.spacing(3),
+    },
+    title: {
+        textAlign: "center",
+        marginBottom: theme.spacing(3),
+    },
+}));
+
 const Chat = () => {
+    const classes = useStyles();
+
     const [messages, setMessages] = useState([]);
     const [error, setError] = useState('');
     const [currentMessage, setCurrentMessage] = useState('');
@@ -76,7 +89,9 @@ const Chat = () => {
         setCurrentMessage(newMessage);
     };
 
-    const handleFormSend = async () => {
+    const handleFormSend = async (e) => {
+        e.preventDefault();
+
         try {
             await axiosApi.post('/messages', {author: currentMessage.author, message: currentMessage.text});
             setCurrentMessage('');
@@ -91,11 +106,13 @@ const Chat = () => {
     };
 
     return (
-        <>
+        <Box className={classes.root}>
             {error ? <div className="text-center bg-danger text-white py-2">{error}</div> : null }
-            <h4 className="text-center">Hello!</h4>
-            <h5 className="text-center">Welcome to JS group 10 chat!</h5>
-            <div className="col-md-8 col-sm-12 px-3 py-3 mx-auto bg-light">
+            <Box className={classes.title}>
+                <Typography variant="h5">Hello!</Typography>
+                <Typography variant="h6">Welcome to JS group 10 chat!</Typography>
+            </Box>
+            <Grid container direction="column" spacing={2}>
                 {messages.map(message => (
                     <Message
                         message={message}
@@ -107,8 +124,8 @@ const Chat = () => {
                     onChange={handleFormChange}
                     onSend={handleFormSend}
                 />
-            </div>
-        </>
+            </Grid>
+        </Box>
     );
 };
 
