@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Grid, makeStyles, Paper, Typography, TextField, Button} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -11,14 +11,35 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MessageForm = props => {
+const initialState = {
+    author: '',
+    message: ''
+};
+
+const MessageForm = () => {
     const classes = useStyles();
+
+    const [message, setMessage] = useState(initialState);
+
+    const handleInputChange = e => {
+        const {name, value} = e.target;
+
+        setMessage(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleFormSubmit = async e => {
+        e.preventDefault();
+        setMessage(initialState);
+    };
 
     return (
         <Grid item>
             <Paper className={classes.root}>
                 <Typography variant="h6" className={classes.title}>Send message</Typography>
-                <form onSubmit={(e) => props.onSend(e)}>
+                <form onSubmit={handleFormSubmit}>
                     <Grid container direction="column" spacing={2}>
                         <Grid item>
                             <TextField
@@ -26,8 +47,8 @@ const MessageForm = props => {
                                 label="Name"
                                 variant="outlined"
                                 fullWidth
-                                value={props.value.author || ''}
-                                onChange={e => props.onChange(e.target.value, props.value.text)}
+                                value={message.author}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item>
@@ -38,8 +59,8 @@ const MessageForm = props => {
                                 multiline
                                 rows={5}
                                 fullWidth
-                                value={props.value.text || ''}
-                                onChange={e => props.onChange(props.value.author, e.target.value)}
+                                value={message.message}
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item>

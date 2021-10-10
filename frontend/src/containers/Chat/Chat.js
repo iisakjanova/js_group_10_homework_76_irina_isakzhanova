@@ -3,7 +3,7 @@ import React from 'react';
 import {Box, Grid, makeStyles, Typography} from "@material-ui/core";
 
 import Message from "../../components/Message/Message";
-import MessageForm from "../../components/MessageForm/MessageForm";
+import MessageForm from "../MessageForm/MessageForm";
 import axiosApi from "../../axiosApi";
 
 const ERROR_MESSAGE_TEXT = 'Something went wrong... Error status ';
@@ -24,7 +24,6 @@ const Chat = () => {
 
     const [messages, setMessages] = useState([]);
     const [error, setError] = useState('');
-    const [currentMessage, setCurrentMessage] = useState('');
 
     useEffect(() => {
         (async () => {
@@ -80,31 +79,6 @@ const Chat = () => {
         }, 2000);
     };
 
-    const handleFormChange = (author, text) => {
-        const newMessage = {
-            author,
-            text
-        };
-
-        setCurrentMessage(newMessage);
-    };
-
-    const handleFormSend = async (e) => {
-        e.preventDefault();
-
-        try {
-            await axiosApi.post('/messages', {author: currentMessage.author, message: currentMessage.text});
-            setCurrentMessage('');
-
-            const result = await getNewMessages();
-            storeNewMessagesLocally(result);
-
-            setError('');
-        } catch (e) {
-            setError(ERROR_MESSAGE_TEXT + e.response.status);
-        }
-    };
-
     return (
         <Box className={classes.root}>
             {error ? <div className="text-center bg-danger text-white py-2">{error}</div> : null }
@@ -119,11 +93,7 @@ const Chat = () => {
                         key={message.id}
                     />
                 ))}
-                <MessageForm
-                    value={currentMessage}
-                    onChange={handleFormChange}
-                    onSend={handleFormSend}
-                />
+                <MessageForm/>
             </Grid>
         </Box>
     );
