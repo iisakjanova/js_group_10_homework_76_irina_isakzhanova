@@ -1,7 +1,9 @@
+import Chat from "./containers/Chat/Chat";
+
 const App = () => {
   return (
       <div className="App">
-        Hello
+          <Chat />
       </div>
   );
 };
