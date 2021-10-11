@@ -3,7 +3,6 @@ import {
     GET_MESSAGES_REQUEST,
     GET_MESSAGES_SUCCESS,
     GET_NEW_MESSAGES_FAILURE,
-    GET_NEW_MESSAGES_REQUEST,
     GET_NEW_MESSAGES_SUCCESS,
     POST_MESSAGE_FAILURE,
     POST_MESSAGE_REQUEST,
@@ -33,8 +32,6 @@ const reducer = (state = initialState, action) => {
         }
         case GET_MESSAGES_FAILURE:
             return {...state, loading: false, error: action.payload};
-        case GET_NEW_MESSAGES_REQUEST:
-            return {...state, loading: true};
         case GET_NEW_MESSAGES_SUCCESS: {
             const lastDatetime = action.payload.length > 0
                 ? action.payload[action.payload.length - 1].datetime
@@ -50,7 +47,7 @@ const reducer = (state = initialState, action) => {
             };
         }
         case GET_NEW_MESSAGES_FAILURE:
-            return {...state, loading: false, error: action.payload};
+            return {...state, error: action.payload};
         case POST_MESSAGE_REQUEST:
             return {...state, loading: true};
         case POST_MESSAGE_SUCCESS:

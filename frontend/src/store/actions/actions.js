@@ -4,7 +4,6 @@ export const GET_MESSAGES_REQUEST = 'GET_MESSAGES_REQUEST';
 export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 export const GET_MESSAGES_FAILURE = 'GET_MESSAGES_FAILURE';
 
-export const GET_NEW_MESSAGES_REQUEST = 'GET_NEW_MESSAGES_REQUEST';
 export const GET_NEW_MESSAGES_SUCCESS = 'GET_NEW_MESSAGES_SUCCESS';
 export const GET_NEW_MESSAGES_FAILURE = 'GET_NEW_MESSAGES_FAILURE';
 
@@ -16,7 +15,6 @@ export const getMessagesRequest = () => ({type: GET_MESSAGES_REQUEST});
 export const getMessagesSuccess = data => ({type: GET_MESSAGES_SUCCESS, payload: data});
 export const getMessagesFailure = error => ({type: GET_MESSAGES_FAILURE, payload: error});
 
-export const getNewMessagesRequest = () => ({type: GET_NEW_MESSAGES_REQUEST});
 export const getNewMessagesSuccess = data => ({type: GET_NEW_MESSAGES_SUCCESS, payload: data});
 export const getNewMessagesFailure = error => ({type: GET_NEW_MESSAGES_FAILURE, payload: error});
 
@@ -41,7 +39,6 @@ export const getNewMessages = () => {
         const lastDatetime = getState().lastDatetime;
 
         try {
-            dispatch(getNewMessagesRequest());
             const response = await axiosApi.get(`/messages?datetime=${lastDatetime}`);
             dispatch(getNewMessagesSuccess(response.data));
         } catch (error) {
