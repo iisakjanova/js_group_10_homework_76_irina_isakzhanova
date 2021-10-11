@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Grid, makeStyles, Paper, Typography, TextField, Button} from "@material-ui/core";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getNewMessages, postMessage} from "../../store/actions/actions";
 
 const useStyles = makeStyles(theme => ({
@@ -23,6 +23,7 @@ const MessageForm = () => {
     const dispatch = useDispatch();
 
     const [message, setMessage] = useState(initialState);
+    const error = useSelector(state => state.postMessageError)
 
     const handleInputChange = e => {
         const {name, value} = e.target;
@@ -37,7 +38,10 @@ const MessageForm = () => {
         e.preventDefault();
         await dispatch(postMessage(message));
         dispatch(getNewMessages());
-        setMessage(initialState);
+
+        if (message.author && message.message) {
+            setMessage(initialState);
+        }
     };
 
     return (
@@ -48,16 +52,19 @@ const MessageForm = () => {
                     <Grid container direction="column" spacing={2}>
                         <Grid item>
                             <TextField
+                                error={!!error}
                                 name="author"
                                 label="Name"
                                 variant="outlined"
                                 fullWidth
                                 value={message.author}
                                 onChange={handleInputChange}
+                                helperText={error && !message.author ? 'Enter your name! ' + error : null}
                             />
                         </Grid>
                         <Grid item>
                             <TextField
+                                error={!!error}
                                 name="message"
                                 label="Message"
                                 variant="outlined"
@@ -66,6 +73,7 @@ const MessageForm = () => {
                                 fullWidth
                                 value={message.message}
                                 onChange={handleInputChange}
+                                helperText={error && !message.message ? 'Enter a message! ' + error : null}
                             />
                         </Grid>
                         <Grid item>

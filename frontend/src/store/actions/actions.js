@@ -54,7 +54,7 @@ export const postMessage = (data) => {
             await axiosApi.post('/messages', data);
             dispatch(postMessageSuccess());
         } catch (error) {
-            dispatch(postMessageFailure(error));
+            dispatch(postMessageFailure(error.response.data.error));
         }
     };
 };

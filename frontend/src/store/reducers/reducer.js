@@ -12,7 +12,8 @@ import {
 const initialState = {
     messages: [],
     lastDatetime: '',
-    loading: false
+    loading: false,
+    postMessageError: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -51,9 +52,9 @@ const reducer = (state = initialState, action) => {
         case POST_MESSAGE_REQUEST:
             return {...state, loading: true};
         case POST_MESSAGE_SUCCESS:
-            return {...state, loading: false};
+            return {...state, loading: false, postMessageError: false};
         case POST_MESSAGE_FAILURE:
-            return {...state, loading: false, error: action.payload};
+            return {...state, loading: false, postMessageError: action.payload};
         default:
             return state;
     }
