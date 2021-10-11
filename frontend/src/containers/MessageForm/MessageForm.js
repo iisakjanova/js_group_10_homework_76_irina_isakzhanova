@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {Grid, makeStyles, Paper, Typography, TextField, Button} from "@material-ui/core";
+import {useDispatch} from "react-redux";
+import {getNewMessages, postMessage} from "../../store/actions/actions";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -18,6 +20,7 @@ const initialState = {
 
 const MessageForm = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const [message, setMessage] = useState(initialState);
 
@@ -32,6 +35,8 @@ const MessageForm = () => {
 
     const handleFormSubmit = async e => {
         e.preventDefault();
+        await dispatch(postMessage(message));
+        dispatch(getNewMessages());
         setMessage(initialState);
     };
 

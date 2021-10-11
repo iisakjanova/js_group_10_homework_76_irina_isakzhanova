@@ -1,13 +1,11 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import React from 'react';
 import {Box, Grid, makeStyles, Typography} from "@material-ui/core";
+import {useDispatch} from "react-redux";
 
-import Message from "../../components/Message/Message";
 import MessageForm from "../MessageForm/MessageForm";
-import axiosApi from "../../axiosApi";
-
-const ERROR_MESSAGE_TEXT = 'Something went wrong... Error status ';
-let lastDatetime;
+import {getMessages, getNewMessages} from "../../store/actions/actions";
+import Messages from "../Messages/Messages";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,78 +19,27 @@ const useStyles = makeStyles(theme => ({
 
 const Chat = () => {
     const classes = useStyles();
-
-    const [messages, setMessages] = useState([]);
-    const [error, setError] = useState('');
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        (async () => {
-            try {
-                const result = await getMessages();
-                setMessages(result);
-                setError('');
-
-                lastDatetime = result[result.length - 1].datetime;
-            } catch (e) {
-                setError(ERROR_MESSAGE_TEXT + e.response.status);
-            }
-        })();
-    }, []);
+        dispatch(getMessages());
+    }, [dispatch]);
 
     useEffect(() => {
-        const interval = checkForNewMessages();
+        const interval = setInterval(() => {
+            dispatch(getNewMessages());
+        }, 3000);
         return () => clearInterval(interval);
-    }, []);
-
-    const getMessages = async () => {
-        const response = await axiosApi.get('/messages');
-        return response.data;
-    };
-
-    const getNewMessages = async () => {
-        const response = await axiosApi.get(`messages?datetime=${lastDatetime}`);
-        return response.data;
-    };
-
-    const storeNewMessagesLocally = data => {
-        if (data && data.length > 0) {
-            setMessages(prevMessages => (
-                [
-                    ...prevMessages,
-                    ...data
-                ]
-            ));
-
-            lastDatetime = data[data.length - 1].datetime;
-        }
-    };
-
-    const checkForNewMessages = () => {
-        return setInterval(async () => {
-            try {
-                const result = await getNewMessages();
-                setError('');
-                storeNewMessagesLocally(result);
-            } catch (e) {
-                setError(ERROR_MESSAGE_TEXT + e.response.status);
-            }
-        }, 2000);
-    };
+    }, [dispatch]);
 
     return (
         <Box className={classes.root}>
-            {error ? <div className="text-center bg-danger text-white py-2">{error}</div> : null }
             <Box className={classes.title}>
                 <Typography variant="h5">Hello!</Typography>
                 <Typography variant="h6">Welcome to JS group 10 chat!</Typography>
             </Box>
             <Grid container direction="column" spacing={2}>
-                {messages.map(message => (
-                    <Message
-                        message={message}
-                        key={message.id}
-                    />
-                ))}
+                <Messages />
                 <MessageForm/>
             </Grid>
         </Box>
