@@ -7,11 +7,13 @@ let data = [];
 
 module.exports = {
     async init() {
-        try {
-            const fileContents = await fs.promises.readFile(filename, 'utf8');
-            data = JSON.parse(fileContents);
-        } catch (e) {
-            console.error(e);
+        if (fs.existsSync(filename)){
+            try {
+                const fileContents = await fs.promises.readFile(filename, 'utf8');
+                data = JSON.parse(fileContents);
+            } catch (e) {
+                console.error(e);
+            }
         }
     },
     getItems(maxQty) {
